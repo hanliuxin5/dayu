@@ -4,14 +4,16 @@
     "description": "",
     "main": "index.js",
     "scripts": {
-      "dev": "nodemon dayu.js",
-      "start": "pm2 start dayu.js"
+        "dev": "nodemon dayu.js",
+        "start": "pm2 start dayu.js"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
-      "express": "^4.18.1",
-      "mockjs": "^1.1.0"
+        "express": "^4.18.1",
+        "openai": "^3.1.0",
+        "mockjs": "^1.1.0",
+        "request": "^2.88.2"
     }
-  }
+}
