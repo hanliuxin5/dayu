@@ -1,20 +1,13 @@
 const express = require('express')
-const Mock = require('mockjs')
 
 const app = express()
+var requestCount = 0
 
 app.get("/api/users", (req, res) => {
 
-  const userList = Mock.mock({
-    'userList|10': [{
-      'id|+1': 1,
-      'name': '@cname',
-      'email': '@email'
-    }]
-  })
-
-  res.status(200)
-  res.json(userList)
+    requestCount++
+    res.status(200)
+    res.json(requestCount)
 })
 
 app.listen(3000, () => {
