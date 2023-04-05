@@ -1,17 +1,25 @@
-// 导入http模块:
-var http = require('http');
-// 创建http server，并传入回调函数:
-var server = http.createServer(function (request, response) {
-    // 回调函数接收request和response对象,
-    // 获得HTTP请求的method和url:
-    console.log(request.method + ': ' + request.url);
-    // 将HTTP响应200写入response, 同时设置Content-Type: text/html:
-    response.writeHead(200, {'Content-Type': 'text/html'});
-    // 将HTTP响应的HTML内容写入response:
-    response.end('Hello world!');
-});
+const express = require('express')
+const Mock = require('mockjs')
 
-// 让服务器监听8080端口:
-server.listen(8081);
+const app = express()
 
-console.log('Server is running at http://127.0.0.1:8081/');
+app.get("/api/users", (req, res) => {
+  const userList = Mock.mock({
+    'userList|10': [{
+      'id|+1': 1,
+      'name': '@cname',
+      'email': '@email'
+    }]
+  })
+
+  setTimeout(() => {
+    throw new Error('服务器故障')
+  }, 5000)
+
+  res.status(200)
+  res.json(userList)
+})
+
+app.listen(3000, () => {
+  console.log("服务启动: 3000")
+})
