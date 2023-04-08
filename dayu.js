@@ -13,29 +13,20 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + "/" + "index.html");
 })
 
-// var messages = new Array();
-// messages.push({ role: "system", content: "You are a helpful assistant" })
 
 app.get('/process_get', runAsyncWrapper(async (req, res) => {
 
   const tmpMessages = [
-    // { role: "system", content: "You are a helpful assistant" },
     { role: "user", content: "hello" },
-    // { role: "assistant", content: "Hello! How can I assist you today?" },
-    // { role: "user", content: "what i just say?" },
-    // { role: "assistant", content: "You just said 'hello'. Is there anything else you would like to say or ask?" },
-    // { role: "user", content: req.query.question },
   ];
-  // messages.push({ role: "user", content: req.query.question })
 
   const response = await openai.createChatCompletion({
-    tmpMessages,
+    messages: tmpMessages,
     model: "gpt-3.5-turbo",
   });
-
-  // messages.push({ role: "assistant", content: response.data.choices[0].messages.content })
+  const content = response.data.choices[0].message.content
   
-  res.end(JSON.stringify(response))
+  res.end(content)
 })
 )
 
@@ -46,8 +37,6 @@ var server = app.listen(3000, function () {
   var port = server.address().port
 
   console.log('listening at 3000')
-
-  console.log(process.env.OPEN_KEY)
 
 })
 
