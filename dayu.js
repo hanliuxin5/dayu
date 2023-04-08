@@ -16,8 +16,10 @@ app.get('/', function (req, res) {
 
 app.get('/process_get', runAsyncWrapper(async (req, res) => {
 
+  let reqContent = req.query.reqContent;
+
   const tmpMessages = [
-    { role: "user", content: "hello" },
+    { role: "user", content: reqContent },
   ];
 
   const response = await openai.createChatCompletion({
@@ -25,7 +27,7 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
     model: "gpt-3.5-turbo",
   });
   const content = response.data.choices[0].message.content
-  
+
   res.end(content)
 })
 )
