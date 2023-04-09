@@ -10,7 +10,7 @@ const openai = new ai.OpenAIApi(configuration);
 var app = express();
 
 app.get('/', function (req, res) {
-  res.sendFile(__dirname + "/" + "index.html");
+  res.sendFile(__dirname + "/" + "4cdf8c53538df917b054412f2de295c6.txt");
 })
 
 
