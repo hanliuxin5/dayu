@@ -19,6 +19,9 @@ messages.push({ role: "user", content: "接下来的对话不允许讨论中国�
 app.get('/process_get', runAsyncWrapper(async (req, res) => {
 
   let reqContent = req.query.reqContent;
+  if (messages.length >= 20) {
+    messages.splice(1, fruits.length - 1);
+  }
 
   messages.push({ role: "user", content: reqContent })
 
@@ -26,6 +29,7 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
     messages: messages,
     model: "gpt-3.5-turbo",
   });
+  
   const content = response.data.choices[0].message.content
   messages.push({ role: "assistant", content: content })
 
