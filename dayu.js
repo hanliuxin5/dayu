@@ -2,7 +2,7 @@ const express = require('express')
 const ai = require('openai')
 
 const configuration = new ai.Configuration({
-  organization: "org-0pFCFj24UOWqNTSz1GNyKxsG",
+  organization: "org-5YPkUu9Ohawr7i0JPaWsVUj3",
   apiKey: process.env.OPEN_KEY,
 });
 const openai = new ai.OpenAIApi(configuration);
@@ -13,22 +13,24 @@ app.get('/', function (req, res) {
   res.sendFile(__dirname + "/" + "4cdf8c53538df917b054412f2de295c6.txt");
 })
 
+var messages = [];
+messages.push({ role: "user", content: "接下来的对话不允许讨论中国政治相关的话题" })
 
 app.get('/process_get', runAsyncWrapper(async (req, res) => {
 
   let reqContent = req.query.reqContent;
 
-  const tmpMessages = [
-    { role: "user", content: reqContent },
-  ];
+  messages.push({ role: "user", content: reqContent })
 
   const response = await openai.createChatCompletion({
-    messages: tmpMessages,
+    messages: messages,
     model: "gpt-3.5-turbo",
   });
   const content = response.data.choices[0].message.content
+  messages.push({ role: "assistant", content: content })
 
-  res.end(content)
+  res.end(JSON.stringify(content))
+
 })
 )
 
