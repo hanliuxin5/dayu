@@ -20,7 +20,7 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
 
   let reqContent = req.query.reqContent;
   if (messages.length >= 10) {
-    messages.splice(1, fruits.length - 1);
+    messages.splice(1, messages.length - 1);
   }
 
   messages.push({ role: "user", content: reqContent })
