@@ -32,7 +32,7 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
     stream: true,
   }, { responseType: "stream" });
 
-  // var finalContent = ""
+  var finalContent = ""
   const contentType = response.headers["content-type"];
   res.setHeader('content-type', contentType);
   res.writeHead(200, {'Transfer-Encoding': 'chunked'})
