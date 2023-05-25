@@ -1,6 +1,5 @@
 const express = require('express')
 const ai = require('openai')
-const timeout = require('connect-timeout')
 
 
 const configuration = new ai.Configuration({
@@ -10,7 +9,6 @@ const configuration = new ai.Configuration({
 const openai = new ai.OpenAIApi(configuration);
 
 var app = express();
-app.use(timeout('180s'))
 
 app.get('/', function (req, res) {
   res.sendFile(__dirname + "/" + "4cdf8c53538df917b054412f2de295c6.txt");
@@ -69,10 +67,6 @@ var server = app.listen(3000, function () {
   console.log('listening at 3000')
 
 })
-
-server.timeout = 180000
-server.requestTimeout = 180000
-server.setTimeout(180000)
 
 function runAsyncWrapper(callback) {
   return function (req, res, next) {
