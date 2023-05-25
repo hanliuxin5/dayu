@@ -33,11 +33,9 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
   }, { responseType: "stream" });
 
   var finalContent = ""
-  const contentType = response.headers["content-type"];
-  res.setHeader('content-type', contentType);
-  res.writeHead(200, {'Transfer-Encoding': 'chunked'})
+  res.writeHead(200, {'Transfer-Encoding': 'chunked','Content-Type':'text/event-stream'})
 
-  // response.data.pipe(res);
+  response.data.pipe(res);
 
   response.data.on('data', data => {
     const lines = data.toString().split('\n').filter(line => line.trim() !== '');
@@ -45,7 +43,7 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
       const message = line.replace(/^data: /, '');
       if (message === '[DONE]') {
         messages.push({ role: "assistant", content: finalContent })
-        // res.end()
+        res.end()
         return;
       }
       try {
