@@ -21,7 +21,7 @@ messages.push({ role: "user", content: "接下来的对话不允许讨论中国�
 
 app.get('/process_get', runAsyncWrapper(async (req, res) => {
 
-  console.log("1111111")
+  console.log(process.env.OPEN_KEY)
 
   let reqContent = req.query.reqContent;
   if (messages.length >= 10) {
@@ -36,7 +36,7 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
     stream: true,
   }, { responseType: "stream" });
 
-  console.log("222222")
+  console.log("1111111")
 
   var finalContent = ""
 
