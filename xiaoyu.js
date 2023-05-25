@@ -26,8 +26,8 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
       model: "gpt-4",
     }, {
     headers: {
-      'Authorization': "Bearer " + process.env.OPEN_KEY,
-      'Content-Type': 'application/json',
+      // 'Authorization': "Bearer " + process.env.OPEN_KEY,
+      'content-Type': 'application/json',
     },
     responseType: "stream",
   })
