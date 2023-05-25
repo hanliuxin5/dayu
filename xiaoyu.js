@@ -21,6 +21,8 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
 
   const at = 'Bearer ' + process.env.OPEN_KEY
 
+  console.log(at)
+
   const response = await axios.post("https://api.openai.com/v1/chat/completions",
     {
       messages: messages,
