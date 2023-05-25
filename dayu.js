@@ -21,6 +21,8 @@ messages.push({ role: "user", content: "接下来的对话不允许讨论中国�
 
 app.get('/process_get', runAsyncWrapper(async (req, res) => {
 
+  console.log("1111111")
+
   let reqContent = req.query.reqContent;
   if (messages.length >= 10) {
     messages.splice(1, messages.length - 1);
@@ -33,6 +35,8 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
     model: "gpt-4",
     stream: true,
   }, { responseType: "stream" });
+
+  console.log("222222")
 
   var finalContent = ""
 
