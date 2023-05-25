@@ -35,7 +35,8 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
   // var finalContent = ""
   const contentType = response.headers["content-type"];
   res.setHeader('content-type', contentType);
-  
+  res.writeHead(200, {'Transfer-Encoding': 'chunked'})
+
   response.data.pipe(res);
 
   // response.data.on('data', data => {
