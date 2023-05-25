@@ -49,9 +49,9 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
           finalContent += parsed.choices[0].delta.content
           res.write(parsed.choices[0].delta.content)
         }
-        console.log(parsed.choices[0].delta);
+        // console.log(parsed.choices[0].delta);
       } catch (error) {
-        console.error('Could not JSON parse stream message', message, error);
+        // console.error('Could not JSON parse stream message', message, error);
       }
     }
   });
