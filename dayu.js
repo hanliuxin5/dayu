@@ -35,29 +35,29 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
   var finalContent = ""
   res.writeHead(200, {'Transfer-Encoding': 'chunked','Content-Type':'text/event-stream'})
 
-  // response.data.pipe(res);
+  response.data.pipe(res);
 
-  response.data.on('data', data => {
-    const lines = data.toString().split('\n').filter(line => line.trim() !== '');
-    for (const line of lines) {
-      const message = line.replace(/^data: /, '');
-      if (message === '[DONE]') {
-        messages.push({ role: "assistant", content: finalContent })
-        res.end()
-        return;
-      }
-      try {
-        const parsed = JSON.parse(message);
-        if (parsed.choices[0].delta.content != undefined) {
-          finalContent += parsed.choices[0].delta.content
-          res.write(parsed.choices[0].delta.content)
-        }
-        console.log(parsed.choices[0].delta);
-      } catch (error) {
-        // console.error('Could not JSON parse stream message', message, error);
-      }
-    }
-  });
+  // response.data.on('data', data => {
+  //   const lines = data.toString().split('\n').filter(line => line.trim() !== '');
+  //   for (const line of lines) {
+  //     const message = line.replace(/^data: /, '');
+  //     if (message === '[DONE]') {
+  //       messages.push({ role: "assistant", content: finalContent })
+  //       res.end()
+  //       return;
+  //     }
+  //     try {
+  //       const parsed = JSON.parse(message);
+  //       if (parsed.choices[0].delta.content != undefined) {
+  //         finalContent += parsed.choices[0].delta.content
+  //         res.write(parsed.choices[0].delta.content)
+  //       }
+  //       console.log(parsed.choices[0].delta);
+  //     } catch (error) {
+  //       // console.error('Could not JSON parse stream message', message, error);
+  //     }
+  //   }
+  // });
 })
 )
 
