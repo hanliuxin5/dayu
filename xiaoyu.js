@@ -19,6 +19,8 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
 
   messages.push({ role: "user", content: reqContent })
 
+  const at = 'Bearer ' + process.env.OPEN_KEY
+
   const response = await axios.post("https://api.openai.com/v1/chat/completions",
     {
       messages: messages,
@@ -26,7 +28,7 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
       model: "gpt-4",
     }, {
     headers: {
-      'Authorization': "Bearer " + process.env.OPEN_KEY,
+      'Authorization': at,
       'content-Type': 'application/json',
     },
     responseType: "stream",
@@ -35,7 +37,7 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
   const stream = response.data;
 
   var finalContent = ""
-  
+
   stream.on('data', data => {
     const lines = data.toString().split('\n').filter(line => line.trim() !== '');
     for (const line of lines) {
