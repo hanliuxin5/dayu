@@ -29,7 +29,7 @@ app.get('/process_get_single', runAsyncWrapper(async (req, res) => {
   mMessages.push({ role: "user", content: reqContent })
 
   const response = await openai.createChatCompletion({
-    messages: messages,
+    messages: mMessages,
     model: "gpt-3.5-turbo",
     stream: true,
   }, { responseType: "stream" });
