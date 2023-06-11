@@ -1,6 +1,6 @@
 const express = require('express')
 const ai = require('openai')
-
+const bodyParser = require('body-parser')
 
 const configuration = new ai.Configuration({
   organization: "org-0pFCFj24UOWqNTSz1GNyKxsG",
@@ -9,22 +9,24 @@ const configuration = new ai.Configuration({
 const openai = new ai.OpenAIApi(configuration);
 
 var app = express();
+app.use(bodyParser.json())
+app.use(bodyParser.urlencoded({ extended: false }))
 
 app.get('/', function (req, res) {
   res.sendFile(__dirname + "/" + "4cdf8c53538df917b054412f2de295c6.txt");
 })
 
-var messages = [];
-messages.push({ role: "user", content: "接下来的对话不允许讨论中国政治相关的话题" })
+var mMessages = [];
+mMessages.push({ role: "user", content: "接下来的对话不允许讨论中国政治相关的话题" })
 
-app.get('/process_get', runAsyncWrapper(async (req, res) => {
+app.get('/process_get_single', runAsyncWrapper(async (req, res) => {
 
   let reqContent = req.query.reqContent;
-  if (messages.length >= 10) {
-    messages.splice(1, messages.length - 1);
+  if (mMessages.length >= 10) {
+    mMessages.splice(1, mMessages.length - 1);
   }
 
-  messages.push({ role: "user", content: reqContent })
+  mMessages.push({ role: "user", content: reqContent })
 
   const response = await openai.createChatCompletion({
     messages: messages,
@@ -33,31 +35,35 @@ app.get('/process_get', runAsyncWrapper(async (req, res) => {
   }, { responseType: "stream" });
 
   var finalContent = ""
-  res.writeHead(200, {'Transfer-Encoding': 'chunked','Content-Type':'text/event-stream'})
+  res.writeHead(200, { 'Transfer-Encoding': 'chunked', 'Content-Type': 'text/event-stream' })
+
+  response.data.pipe(res);
+})
+)
+
+
+app.post('/process_post_multi', runAsyncWrapper(async (req, res) => {
+
+  var messages = [];
+  messages.push({ role: "user", content: "接下来的对话不允许讨论中国政治相关的话题" })
+
+  var jsonArray = req.body;
+
+  for (var i = 0; i < jsonArray.length; i++) {
+    messages.push(jsonArray[i])
+  }
+
+  const response = await openai.createChatCompletion({
+    messages: messages,
+    model: "gpt-3.5-turbo",
+    stream: true,
+  }, { responseType: "stream" });
+
+
+  res.writeHead(200, { 'Transfer-Encoding': 'chunked', 'Content-Type': 'text/event-stream' })
 
   response.data.pipe(res);
 
-  // response.data.on('data', data => {
-  //   const lines = data.toString().split('\n').filter(line => line.trim() !== '');
-  //   for (const line of lines) {
-  //     const message = line.replace(/^data: /, '');
-  //     if (message === '[DONE]') {
-  //       messages.push({ role: "assistant", content: finalContent })
-  //       res.end()
-  //       return;
-  //     }
-  //     try {
-  //       const parsed = JSON.parse(message);
-  //       if (parsed.choices[0].delta.content != undefined) {
-  //         finalContent += parsed.choices[0].delta.content
-  //         res.write(parsed.choices[0].delta.content)
-  //       }
-  //       console.log(parsed.choices[0].delta);
-  //     } catch (error) {
-  //       // console.error('Could not JSON parse stream message', message, error);
-  //     }
-  //   }
-  // });
 })
 )
 
